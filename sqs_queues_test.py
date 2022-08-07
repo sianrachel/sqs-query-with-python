@@ -5,7 +5,7 @@ from moto import mock_sqs
 from sqs_queues import SqsQueues as Queues
 
 REGION='eu-west-1'
-
+BASE_URL = 'https://eu-west-1.queue.amazonaws.com/123456789012/'
 TEST_QUEUE_1 = 'test-queue-1'
 TEST_QUEUE_2 = 'test-queue-2'
 TEST_MESSAGE_1 = 'This is your first test message'
@@ -28,3 +28,10 @@ def test_get_queue_url(sqs_client):
     response = instance.get_queue_url(TEST_QUEUE_1)
     assert TEST_QUEUE_1 in response
     assert TEST_QUEUE_2 not in response
+
+def test_get_queue_message_count(sqs_client):
+    instance = Queues()
+    sqs_client.create_queue(QueueName=TEST_QUEUE_2)
+    sqs_client.send_message(QueueUrl = BASE_URL + TEST_QUEUE_2, MessageBody = TEST_MESSAGE_2)
+    count = instance.get_queue_message_count(BASE_URL + TEST_QUEUE_2)
+    assert count == 1
