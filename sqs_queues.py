@@ -33,3 +33,11 @@ class SqsQueues:
                             })
         pp.pprint(response)
         return response
+        
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        instance = SqsQueues()
+        instance.get_queues_message_totals(sys.argv[1:])
+    else:
+        print('Please specify at least one queue name!')
