@@ -43,7 +43,7 @@ aws sqs list-queues
 
 ## Running as a script 🦋
 
-Target the main file sqs_queues and specify a queue name (listing inprevious step) to receive the queue url:
+Target the main file sqs_queues and specify a queue name (listing in previous step) to receive the queue url:
 
 This is an example cmd, but you can use any queue name you have created:
 

@@ -10,6 +10,7 @@ TEST_QUEUE_1 = 'test-queue-1'
 TEST_QUEUE_2 = 'test-queue-2'
 TEST_MESSAGE_1 = 'This is your first test message'
 TEST_MESSAGE_2 = 'This is your second test message'
+dash_dlq = '-dlq'
 
 @pytest.fixture(scope='function')
 def aws_credentials():
@@ -40,8 +41,8 @@ def test_get_queues_message_totals(sqs_client):
     instance = Queues()
     sqs_client.create_queue(QueueName=TEST_QUEUE_1)
     sqs_client.create_queue(QueueName=TEST_QUEUE_2)
-    sqs_client.create_queue(QueueName=TEST_QUEUE_1 + "-dlq")
-    sqs_client.create_queue(QueueName=TEST_QUEUE_2 + "-dlq")
+    sqs_client.create_queue(QueueName=TEST_QUEUE_1 + dash_dlq)
+    sqs_client.create_queue(QueueName=TEST_QUEUE_2 + dash_dlq)
     sqs_client.send_message(QueueUrl = BASE_URL + TEST_QUEUE_1, MessageBody = TEST_MESSAGE_1)
     sqs_client.send_message(QueueUrl = BASE_URL + TEST_QUEUE_2, MessageBody = TEST_MESSAGE_1)
     sqs_client.send_message(QueueUrl = BASE_URL + TEST_QUEUE_2, MessageBody = TEST_MESSAGE_2)

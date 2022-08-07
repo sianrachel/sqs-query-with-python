@@ -3,6 +3,7 @@ import json
 import pprint
 
 pp = pprint.PrettyPrinter(indent=4)
+dash_dlq = '-dlq'
 
 class SqsQueues:
     def __init__(self):
@@ -23,7 +24,7 @@ class SqsQueues:
         response = []
         for queue in queues:
             url = self.get_queue_url(queue)
-            dlq = url + '-dlq'
+            dlq = url + dash_dlq
             standard_count = self.get_queue_message_count(url)
             dead_letter_count = self.get_queue_message_count(dlq)
             response.append({'standard_queue_url': url,
