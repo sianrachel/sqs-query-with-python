@@ -1,4 +1,8 @@
 import boto3
+import json
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
 
 class SqsQueues:
     def __init__(self):
@@ -14,3 +18,18 @@ class SqsQueues:
         attrs = 'ApproximateNumberOfMessages'
         count = self.client.get_queue_attributes(QueueUrl=target_url, AttributeNames=[attrs])['Attributes'].get(attrs)
         return int(count)
+
+    def get_queues_message_totals(self,queues):
+        response = []
+        for queue in queues:
+            url = self.get_queue_url(queue)
+            dlq = url + '-dlq'
+            standard_count = self.get_queue_message_count(url)
+            dead_letter_count = self.get_queue_message_count(dlq)
+            response.append({'standard_queue_url': url,
+                            'dead_letter_queue_url': dlq,
+                            'standard_queue_message_count': standard_count,
+                            'dead_letter_queue_message_count': dead_letter_count
+                            })
+        pp.pprint(response)
+        return response

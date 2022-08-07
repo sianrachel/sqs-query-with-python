@@ -35,3 +35,16 @@ def test_get_queue_message_count(sqs_client):
     sqs_client.send_message(QueueUrl = BASE_URL + TEST_QUEUE_2, MessageBody = TEST_MESSAGE_2)
     count = instance.get_queue_message_count(BASE_URL + TEST_QUEUE_2)
     assert count == 1
+
+def test_get_queues_message_totals(sqs_client):
+    instance = Queues()
+    sqs_client.create_queue(QueueName=TEST_QUEUE_1)
+    sqs_client.create_queue(QueueName=TEST_QUEUE_2)
+    sqs_client.create_queue(QueueName=TEST_QUEUE_1 + "-dlq")
+    sqs_client.create_queue(QueueName=TEST_QUEUE_2 + "-dlq")
+    sqs_client.send_message(QueueUrl = BASE_URL + TEST_QUEUE_1, MessageBody = TEST_MESSAGE_1)
+    sqs_client.send_message(QueueUrl = BASE_URL + TEST_QUEUE_2, MessageBody = TEST_MESSAGE_1)
+    sqs_client.send_message(QueueUrl = BASE_URL + TEST_QUEUE_2, MessageBody = TEST_MESSAGE_2)
+    totals = instance.get_queues_message_totals([TEST_QUEUE_1, TEST_QUEUE_2])
+    assert len(totals) == 2
+    assert len(totals[0]) == 4
